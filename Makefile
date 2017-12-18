@@ -1,7 +1,7 @@
 #
 # Set CROSS_PREFIX to prepend to all compiler tools at once for easier
 # cross-compilation.
-CROSS_PREFIX =
+CROSS_PREFIX = /usr/bin/arm-linux-gnueabihf-
 CC           = $(CROSS_PREFIX)gcc
 AR           = $(CROSS_PREFIX)ar
 RANLIB       = $(CROSS_PREFIX)ranlib
@@ -10,7 +10,7 @@ STRIP        = $(CROSS_PREFIX)strip
 SHLIB        = $(CC) -shared
 STRIPLIB     = $(STRIP) --strip-unneeded
 
-CFLAGS	+= -O3 -Wall -pthread
+CFLAGS	+= -O3 -Wall -pthread -mcpu=cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard
 
 LIB1     = libpigpio.so
 OBJ1     = pigpio.o command.o
