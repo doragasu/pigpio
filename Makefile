@@ -31,12 +31,11 @@ LL2      = -L. -lpigpiod_if -pthread -lrt
 
 LL3      = -L. -lpigpiod_if2 -pthread -lrt
 
-prefix = /usr/local
+prefix = /usr
 exec_prefix = $(prefix)
 bindir = $(exec_prefix)/bin
 includedir = $(prefix)/include
 libdir = $(prefix)/lib
-mandir = $(prefix)/man
 
 all:	$(ALL)
 
@@ -77,7 +76,6 @@ clean:
 	rm -f *.o *.i *.s *~ $(ALL)
 
 install:	$(ALL)
-	install -m 0755 -d                $(DESTDIR)/opt/pigpio/cgi
 	install -m 0755 -d                $(DESTDIR)$(includedir)
 	install -m 0644 pigpio.h          $(DESTDIR)$(includedir)
 	install -m 0644 pigpiod_if.h      $(DESTDIR)$(includedir)
@@ -90,13 +88,9 @@ install:	$(ALL)
 	install -m 0755 pig2vcd           $(DESTDIR)$(bindir)
 	install -m 0755 pigpiod           $(DESTDIR)$(bindir)
 	install -m 0755 pigs              $(DESTDIR)$(bindir)
-	if which python2; then python2 setup.py install; fi
-	if which python3; then python3 setup.py install; fi
-	install -m 0755 -d                $(DESTDIR)$(mandir)/man1
-	install -m 0644 *.1               $(DESTDIR)$(mandir)/man1
-	install -m 0755 -d                $(DESTDIR)$(mandir)/man3
-	install -m 0644 *.3               $(DESTDIR)$(mandir)/man3
-	ldconfig
+	
+	if which python2; then python2 setup.py install --root="$(DESTDIR)/"; fi
+	if which python3; then python3 setup.py install --root="$(DESTDIR)/"; fi
 
 uninstall:
 	rm -f $(DESTDIR)$(includedir)/pigpio.h
@@ -110,8 +104,6 @@ uninstall:
 	rm -f $(DESTDIR)$(bindir)/pigs
 	if which python2; then python2 setup.py install --record /tmp/pigpio >/dev/null; xargs rm -f < /tmp/pigpio >/dev/null; fi
 	if which python3; then python3 setup.py install --record /tmp/pigpio >/dev/null; xargs rm -f < /tmp/pigpio >/dev/null; fi
-	rm -f $(DESTDIR)$(mandir)/man1/pig*.1
-	rm -f $(DESTDIR)$(mandir)/man3/pig*.3
 	ldconfig
 
 $(LIB1):	$(OBJ1)
